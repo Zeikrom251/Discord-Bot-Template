@@ -38,7 +38,7 @@ This project provides a basic structure for a Discord bot build with **Discord.j
 
 ---
 
-## 📥 Installation
+## 🚀 Installation
 
 ### 1. Clone the repository
 
@@ -109,10 +109,11 @@ the bot will log in and be ready to accept commands.
 
 ---
 
-## 📨 Contributing
+## 🤝 Contributing
 
 Feel free to fork this repository, create an issue, or submit a pull request if you find any bugs or want to add new features.
 
 ---
 
-**📋 License :** This project is licensed under the MIT License.
+## 📄 License
+This project is licensed under the [MIT License](https://fr.wikipedia.org/wiki/Licence_MIT).
