@@ -22,6 +22,35 @@ module.exports = async (bot, interaction) => {
     return fullID;
   }
 
+  // Function to handler or errors in this file
+  function errorHandler(bot, interaction, error) {
+    const embedErrorDetectionLog = new Discord.EmbedBuilder()
+      .setColor(Config.colors.mainServerColor)
+      .setTitle("📌 Error Détecté :")
+      .setDescription(`\`\`\`${error}\`\`\``)
+      .setTimestamp()
+
+    const embedErrorDetected = new Discord.EmbedBuilder()
+      .setColor(Config.colors.error)
+      .setDescription(`${Config.emotes.error} **Une erreur a été détecté lors de votre interaction !**`)
+
+    console.error(error)
+    bot.channels.cache.get(Config.channels.errorLogs).send({ embeds: [embedErrorDetectionLog]})
+    interaction.reply({embeds: [embedErrorDetected], ephemeral: true})
+  }
+
+  // Gestion des Applications User Commands
+  if (interaction.type === Discord.InteractionType.ApplicationCommand) {
+    const command = bot.commands.get(interaction.commandName)
+    if (!command) return;
+
+    try {
+      await command.run(bot, interaction, interaction.options)
+    } catch (error) {
+      errorHandler(bot, interaction, error)
+    }
+  }
+
   if (interaction.isButton()) {
   }
 

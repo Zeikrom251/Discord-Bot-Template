@@ -2,7 +2,7 @@
   "token": "YOUR_BOT_TOKEN",
   "colors": {
     "mainServerColor": "YOUR_HEX_COLOR",
-    "default": "#1e2124",
+    "default": "#2b2d31",
     "error": "#ff0000",
     "success": "#1fff00",
     "warning": "#fff300"
