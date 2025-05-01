@@ -10,7 +10,7 @@ const Config = {
   emotes: {
     error: "❌",
     success: "✅",
-    warning: ":warning:",
+    warning: "⚠️",
   },
   channels: {
     logs: "YOUR_CHANNEL_ID",
