@@ -1,13 +1,15 @@
-const mysql = require("mysql2");
-const Config = require("../config.json");
+const mysql = require("mysql2")
+require("dotenv").config()
 
-module.exports = async () => {
-  let db = await mysql.createConnection({
-    host: Config.db.dataBaseHost,
-    user: Config.db.dataBaseUser,
-    password: Config.db.dataBasePassword,
-    database: Config.db.dataBaseName,
-  });
+const db = mysql
+  .createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    connectionLimit: 20,
+    queueLimit: 0,
+  })
+  .promise()
 
-  return db;
-};
+module.exports = db
