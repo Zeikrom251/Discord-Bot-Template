@@ -18,26 +18,26 @@ This project provides a basic structure for a Discord bot build with **Discord.j
 /project
 │
 ├── /commands           # Put your commands in this folder
-│   ├── ping.js
+│   └── ping.js
 │
 ├── /events             # Add other events like "guildMemberAdd" or "messageCreate"
 │   ├── ready.js
-│   ├── interactionCreate.js
+│   └── interactionCreate.js
 │
 ├── /functions
 │   ├── utils.js        # Here you will find pre-created functions that are usefull
-│   ├── queries.js      # You can add a file and create functions of your queries to your database
+│   └── queries.js      # You can add a file and create functions of your queries to your database
 │
 ├── /interactions       # You can check the "interactionCreate" file to understand how it works
 │   ├── /buttons
 │   ├── /modals
-│   ├── /selects
+│   └── /selects
 │
 ├── /loader
 │   ├── loadCommands.js
 │   ├── loadDataBase.js
 │   ├── loadEvents.js
-│   ├── loadSlashCommand.js
+│   └── loadSlashCommand.js
 │
 ├── .env              #The dotenv to store sensitive inforamtions like the token
 ├── config.js         # Edit the config file as you wish
@@ -80,6 +80,8 @@ DB_USER =
 DB_PASSWORD =
 DB_NAME =
 ```
+
+> ℹ️ The database use the lib `mysql2`, you can use either a _mysql_ or _mariadb_ database instance.<br>Please refer to [the documentation]([https://www.npmjs.com/package/mysql2](https://sidorares.github.io/node-mysql2/docs/documentation)) for the details.
 
 Edit the `config.js` file with your bot's information, including :
 
