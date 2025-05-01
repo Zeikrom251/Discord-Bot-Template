@@ -4,6 +4,6 @@ module.exports = {
   dm: false,
 
   async run(interaction) {
-    await interaction.reply("🏓 Pong!")
+    await interaction.reply({content: "🏓 Pong!"})
   },
 }
