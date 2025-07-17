@@ -4,11 +4,15 @@ This project provides a basic structure for a Discord bot build with **Discord.j
 
 ## ✨ Features
 
-- **Command Handling :** Load and handle commands dynamically.
-- **Database Integration :** Connect a database with reconnection logic.
-- **Slash Commands :** Register and handle custom slash commands.
-- **Interaction Handlers :** Handle interactions like buttons, select menus, and modals.
-- **Error Handling :** Built in error handler.
+- **Improved Project Structure:** Organized source code with clear separation of concerns
+- **Environment-Based Configuration:** Different settings for development and production
+- **Command Handling:** Load and handle commands dynamically
+- **Database Integration:** Connect to a database with reconnection logic
+- **Data Layer Abstraction:** Structured database queries and mutations
+- **Slash Commands:** Register and handle custom slash commands
+- **Interaction Handlers:** Handle interactions like buttons, select menus, and modals
+- **Error Handling:** Built-in error handler
+- **Code Formatting:** Prettier configuration for consistent code style
 
 ---
 
@@ -17,30 +21,44 @@ This project provides a basic structure for a Discord bot build with **Discord.j
 ```bash
 /project
 │
-├── /commands           # Put your commands in this folder
-│   └── ping.js
+├── /src                       # Source code directory
+│   ├── /commands              # Bot commands
+│   │   └── ping.js
+│   │
+│   ├── /components            # Interactive components
+│   │   ├── /interactions
+│   │   │   ├── /buttons
+│   │   │   ├── /modals
+│   │   │   └── /selects
+│   │   └── /modules
+│   │
+│   ├── /context               # Configuration and data context
+│   │   ├── /config            # Environment-specific configuration
+│   │   │   ├── development.js # Development environment settings
+│   │   │   ├── index.js       # Config loader
+│   │   │   └── production.js  # Production environment settings
+│   │   ├── /data              # Data access layer
+│   │   │   └── /data-user     # User-related database operations
+│   │   │       ├── mutation.js # Functions for modifying user data
+│   │   │       └── queries.js  # Functions for retrieving user data
+│   │   └── /utils             # Utility functions
+│   │       ├── emoteComposer.js
+│   │       ├── errorHandler.js
+│   │       └── generateId.js
+│   │
+│   ├── /events                # Discord event handlers
+│   │   ├── interactionCreate.js
+│   │   └── ready.js
+│   │
+│   └── /handlers              # System handlers
+│       ├── loadCommands.js
+│       ├── loadDataBase.js
+│       ├── loadEvents.js
+│       └── loadSlashCommand.js
 │
-├── /events             # Add other events like "guildMemberAdd" or "messageCreate"
-│   ├── ready.js
-│   └── interactionCreate.js
-│
-├── /functions
-│   ├── utils.js        # Here you will find pre-created functions that are usefull
-│   └── queries.js      # You can add a file and create functions of your queries to your database
-│
-├── /interactions       # You can check the "interactionCreate" file to understand how it works
-│   ├── /buttons
-│   ├── /modals
-│   └── /selects
-│
-├── /loader
-│   ├── loadCommands.js
-│   ├── loadDataBase.js
-│   ├── loadEvents.js
-│   └── loadSlashCommand.js
-│
-├── .env              #The dotenv to store sensitive inforamtions like the token
-├── config.js         # Edit the config file as you wish
+├── .env.example              # Example environment variables template
+├── .prettierrc               # Prettier code formatting configuration
+├── .prettierignore           # Files to exclude from Prettier formatting
 ├── index.js
 ├── package.json        # Dependencies are here
 └── README.md
@@ -69,31 +87,35 @@ npm install
 
 ### 3. Configuration
 
-Create a **dotenv** file, you name it `.env`. In that file you can put sensitive informations like your bot Token, or your database informations.
+Copy the example environment file to create your own `.env` file:
 
-Example `.env` :
-
-```js
-TOKEN =
-DB_HOST =
-DB_USER =
-DB_PASSWORD =
-DB_NAME =
+```bash
+cp .env.example .env
 ```
 
-> ℹ️ The database use the lib `mysql2`, you can use either a _mysql_ or _mariadb_ database instance.<br>Please refer to [the documentation]([https://www.npmjs.com/package/mysql2](https://sidorares.github.io/node-mysql2/docs/documentation)) for the details.
+Edit the `.env` file with your sensitive information:
 
-Edit the `config.js` file with your bot's information, including :
+```
+TOKEN = YOUR_DISCORD_BOT_TOKEN
+DB_HOST = YOUR_DATABASE_HOST
+DB_USER = YOUR_DATABASE_USER
+DB_PASSWORD = YOUR_DATABASE_PASSWORD
+DB_NAME = YOUR_DATABASE_NAME
+```
 
-- **token :** Your Discord bot token ([Here](https://discord.com/developers/applications))
-- **colors :** Customize the color scheme for your bot `mainServerColor`
-- **Channels :** Define channel IDs for logs and error logs.
+> ℹ️ The database uses the `mysql2` library, so you can use either a _MySQL_ or _MariaDB_ database instance.<br>Please refer to [the documentation](https://sidorares.github.io/node-mysql2/docs/documentation) for details.
 
-Example `config.js` :
+The configuration system now uses environment-specific settings:
+
+- `src/context/config/production.js` - Main configuration used in production
+- `src/context/config/development.js` - Override settings for development (optional)
+- `src/context/config/index.js` - Loads the appropriate config based on NODE_ENV
+
+Example configuration structure:
 
 ```js
-const Config = {
-  token: "YOUR_BOT_TOKEN",
+// Example production.js or development.js
+module.exports = {
   colors: {
     mainServerColor: "YOUR_HEX_COLOR",
     default: "#2b2d31",
@@ -104,32 +126,73 @@ const Config = {
   emotes: {
     error: "❌",
     success: "✅",
-    warning: ":warning:",
+    warning: "⚠️",
   },
   channels: {
     logs: "YOUR_CHANNEL_ID",
     errorLogs: "YOUR_CHANNEL_ID",
   },
-}
-
-module.exports = Config
+},
 ```
 
 ### 4. Running the Bot
 
-Start the bot by running :
+Start the bot in production mode:
 
 ```bash
-node index
+node index.js
 ```
 
-the bot will log in and be ready to accept commands.
+Or for development mode:
 
----
+```bash
+NODE_ENV=development node index.js
+```
 
-## 🤝 Contributing
+The bot will load the appropriate configuration based on the environment and be ready to accept commands.
 
-Feel free to fork this repository, create an issue, or submit a pull request if you find any bugs or want to add new features.
+## 💾 Database Layer
+
+The project includes a structured database layer in the `src/context/data` directory:
+
+### User Data Example
+
+#### Queries
+Query functions in `data-user/queries.js` are used to retrieve data:
+
+```js
+// Example query function
+async function getUserById(id) {
+  try {
+    const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
+    return rows;
+  } catch (error) {
+    console.error("Error in 'getUserById':", error);
+    throw error;
+  }
+}
+```
+
+#### Mutations
+Mutation functions in `data-user/mutation.js` are used to modify data:
+
+```js
+// Example mutation function
+async function insertUserQuery(userData) {
+  try {
+    const columns = Object.keys(userData);
+    const placehorders = columns.map(() => '?').join(', ');
+    const values = Object.values(userData);
+
+    const query = `INSERT INTO users (${columns.join(', ')}) VALUES (${placehorders})`;
+    const [result] = await db.query(query, values);
+    return result;
+  } catch (error) {
+    console.error("Error in 'insertUserQuery':", error);
+    throw error;
+  }
+}
+```
 
 ---
 
