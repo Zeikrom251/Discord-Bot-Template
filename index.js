@@ -1,44 +1,49 @@
-const Discord = require("discord.js")
-const intents = new Discord.IntentsBitField(3276799)
-const bot = new Discord.Client({ intents })
-const loadCommands = require("./loader/loadCommands")
-const loadEvents = require("./loader/loadEvents")
-const Config = require("./config")
-require("dotenv").config()
+const intents = new IntentsBitField(3276799);
+const bot = new Client({ intents });
+const loadCommands = require('./src/handlers/loadCommands');
+const loadEvents = require('./src/handlers/loadEvents');
+const { Config } = require('./src/context/config');
+const {
+  IntentsBitField,
+  Client,
+  Collection,
+  EmbedBuilder,
+} = require('discord.js');
+require('dotenv').config();
 
-bot.commands = new Discord.Collection()
+bot.commands = new Collection();
 
 // Gestion des erreurs du bot
-process.on("unhandledRejection", (err, origin) => {
-  console.log(err, origin)
+process.on('unhandledRejection', (err, origin) => {
+  console.log(err, origin);
 
-  let embedBotLogs = new Discord.EmbedBuilder()
+  let embedBotLogs = new EmbedBuilder()
     .setColor(Config.colors.mainServerColor)
-    .setTitle(`📌 Erreur détecté :`)
+    .setTitle(`📌 Error detected:`)
     .setDescription(`\`\`\`${err}\n\n\n${origin}\`\`\``)
-    .setTimestamp()
+    .setTimestamp();
 
   bot.channels.cache
     .get(Config.channels.errorLogs)
-    .send({ embeds: [embedBotLogs] })
-})
+    .send({ embeds: [embedBotLogs] });
+});
 
-process.on("unhandledRejectionMonitor", (err, origin) => {
-  console.log(err, origin)
+process.on('unhandledRejectionMonitor', (err, origin) => {
+  console.log(err, origin);
 
-  let embedBotLogs = new Discord.EmbedBuilder()
+  let embedBotLogs = new EmbedBuilder()
     .setColor(Config.colors.mainServerColor)
-    .setTitle(`📌 Erreur détecté :`)
+    .setTitle(`📌 Error detected:`)
     .setDescription(`\`\`\`${err}\n\n\n${origin}\`\`\``)
-    .setTimestamp()
+    .setTimestamp();
 
   bot.channels.cache
     .get(Config.channels.errorLogs)
-    .send({ embeds: [embedBotLogs] })
-})
+    .send({ embeds: [embedBotLogs] });
+});
 
 bot.login(process.env.TOKEN).then(() => {
-  global.bot = bot
-})
-loadCommands(bot)
-loadEvents(bot)
+  global.bot = bot;
+  loadCommands(bot);
+  loadEvents(bot);
+});
