@@ -24,6 +24,8 @@
  * await updateUserQuery(userId, updates);
  */
 
+const { db } = require('../../../handlers/loadDataBase');
+
 async function insertUserQuery(userData) {
   try {
     const columns = Object.keys(userData);

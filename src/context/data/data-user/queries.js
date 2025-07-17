@@ -1,6 +1,7 @@
 // Examples async query functions for a users table
-
 /* Those are example functions, of course you'll need to adapt them to your specific database setup and error handling. */
+
+const { db } = require('../../../handlers/loadDataBase');
 
 async function getAllUsers() {
   try {
